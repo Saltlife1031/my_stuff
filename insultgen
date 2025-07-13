@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insult Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
+        .shake {
+            animation: shake 0.5s;
+        }
+        
+        .insult-text {
+            transition: all 0.3s ease;
+            min-height: 80px;
+        }
+        
+        .btn-insult {
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-insult:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-insult:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-900 to-indigo-800 min-h-screen flex flex-col items-center justify-center p-4">
+    <div class="max-w-md w-full bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl border border-white/20">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-white mb-2">Insult Generator</h1>
+            <p class="text-white/80">Click the button below to receive your personalized insult</p>
+        </div>
+        
+        <div class="bg-white/20 rounded-xl p-6 mb-8 flex flex-col items-center justify-center">
+            <div class="insult-text text-center text-white text-2xl font-medium mb-4 flex items-center justify-center">
+                <i class="fas fa-comment-dots text-3xl mr-3 text-yellow-300 floating"></i>
+                <span id="insult-display">I'm too polite to insult you... yet</span>
+            </div>
+            <div class="text-white/60 text-sm">
+                <span id="insult-count">0</span> insults served
+            </div>
+        </div>
+        
+        <button id="insult-btn" class="btn-insult w-full py-4 px-6 bg-gradient-to-r from-red-500 to-pink-500 text-white font-bold rounded-xl text-lg flex items-center justify-center hover:from-red-600 hover:to-pink-600 active:from-red-700 active:to-pink-700">
+            <i class="fas fa-bolt mr-2"></i>
+            Insult Me!
+        </button>
+        
+        <div class="mt-6 text-center text-white/60 text-sm">
+            <p>Why are you still clicking? Don't you have anything better to do?</p>
+        </div>
+    </div>
+    
+    <div class="mt-8 text-white/50 text-xs text-center">
+        <p>Disclaimer: All insults are randomly generated and not personal. Probably.</p>
+    </div>
+
+    <script>
+        const insults = [
+            "You're the reason the gene pool needs a lifeguard.",
+            "If ignorance is bliss, you must be the happiest person alive.",
+            "You're not stupid; you just have bad luck when thinking.",
+            "I'd agree with you but then we'd both be wrong.",
+            "You're like a cloud. When you disappear, it's a beautiful day.",
+            "Your face makes onions cry.",
+            "You're the human equivalent of a participation trophy.",
+            "I'd explain it to you but I don't have any crayons with me.",
+            "You're not pretty enough to be this dumb.",
+            "If I wanted to kill myself, I'd climb your ego and jump to your IQ.",
+            "You're the reason shampoo has instructions.",
+            "I'd call you a tool, but that would imply you're useful.",
+            "You're like Monday mornings - nobody likes you.",
+            "Your birth certificate is an apology letter from the condom factory.",
+            "You're the reason aliens won't talk to us.",
+            "I'd slap you, but that would be animal abuse.",
+            "You're not the dumbest person in the world, but you better hope they don't die.",
+            "You're the human version of a '404 Error'.",
+            "If brains were dynamite, you wouldn't have enough to blow your nose.",
+            "You're like a dictionary - you add meaning to my life, but only when you're not around."
+        ];
+        
+        const insultBtn = document.getElementById('insult-btn');
+        const insultDisplay = document.getElementById('insult-display');
+        const insultCount = document.getElementById('insult-count');
+        let count = 0;
+        
+        insultBtn.addEventListener('click', () => {
+            // Get random insult
+            const randomInsult = insults[Math.floor(Math.random() * insults.length)];
+            
+            // Update display
+            insultDisplay.textContent = randomInsult;
+            
+            // Add shake animation
+            insultDisplay.parentElement.classList.add('shake');
+            setTimeout(() => {
+                insultDisplay.parentElement.classList.remove('shake');
+            }, 500);
+            
+            // Update count
+            count++;
+            insultCount.textContent = count;
+            
+            // Change button color occasionally
+            if (count % 5 === 0) {
+                const colors = [
+                    'from-red-500 to-pink-500',
+                    'from-purple-500 to-indigo-500',
+                    'from-green-500 to-teal-500',
+                    'from-yellow-500 to-orange-500',
+                    'from-blue-500 to-cyan-500'
+                ];
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                insultBtn.className = `btn-insult w-full py-4 px-6 bg-gradient-to-r ${randomColor} text-white font-bold rounded-xl text-lg flex items-center justify-center hover:from-red-600 hover:to-pink-600 active:from-red-700 active:to-pink-700`;
+            }
+            
+            // Change insult text color
+            const textColors = ['text-white', 'text-red-300', 'text-yellow-300', 'text-green-300', 'text-blue-300', 'text-purple-300'];
+            insultDisplay.className = `insult-text text-center ${textColors[Math.floor(Math.random() * textColors.length)]} text-2xl font-medium mb-4 flex items-center justify-center`;
+        });
+    </script>
+</body>
+</html>
